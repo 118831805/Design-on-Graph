@@ -40,7 +40,7 @@ The design of large-scale equipment manufacturing systems plays a crucial role i
 
 ## 2. 核心文件介绍
 
-本项目主要涉及三个文件，分别是**Design_on_Graph.py**方法，。
+本项目主要涉及两个核心文件，分别是**Design_on_Graph.py**，**app_for_Design_on_Graph.py**，接下来逐一介绍。
 
 - ✅ 特性1（例如：基于XX技术的高性能处理）
 - ✅ 特性2（例如：支持XX格式的灵活输入）
