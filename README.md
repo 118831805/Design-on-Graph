@@ -31,7 +31,9 @@ The design of large-scale equipment manufacturing systems plays a crucial role i
 
 ### 相关论文：
 如果您认为我们的代码对您有帮助，请引用以下论文：
+
 [1] Design-on-Graph: A graph retrieval-augmented generation-based method to support manufacturing system design
+
 [2] An Ontology-based Engineering system to supporort aircraft manufacturing system design
 
 ---
