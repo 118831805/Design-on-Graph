@@ -66,17 +66,17 @@ class EnhancedNeo4jGraph(Neo4jGraph):
     
     关键数据表：
     │ 节点类型       │ 属性示例                      │ 标签          │
-    │---------------│-----------------------------│---------------│
-    │ Operation     │ name, duration, auto/manual │ HAS_PRECEDENCE│
-    │ Resource      │ type, cost, quantity        │ REQUIRES      │
-    │ Constraint    │ standard, tolerance         │ APPLIES_TO    │
+    │---------------│------------------------------│---------------│
+    │ Operation     │ name, duration, auto/manual  │ HAS_PRECEDENCE│
+    │ Resource      │ type, cost, quantity         │ REQUIRES      │
+    │ Constraint    │ standard, tolerance          │ APPLIES_TO    │
     """
     QUERY_TEMPLATES = {
         "precedence": "MATCH (a:Operation)-[r:HAS_PRECEDENCE]->(b) RETURN a.name, type(r), b.name",
         "resource": "MATCH (o:Operation)-[r:REQUIRES]->(res) RETURN o.name, res.type, r.quantity"
     }
 
-
+#### 🧠多轮对话记忆体
 
 
 ### 2.1核心创新：
