@@ -110,6 +110,8 @@ Chain Construction:
 
 router_chain = router_prompt | llm
 
+
+
 🧠 ​ 2.2 Cypher Chain
 
 cypher_chain = GraphCypherQAChain.from_llm(
@@ -126,6 +128,8 @@ cypher_chain = GraphCypherQAChain.from_llm(
     return_direct=True,
     return_intermediate_steps=True
 )
+
+
 
 🧠 ​ 2.3 Graph Response Chain
 
@@ -153,10 +157,11 @@ Instructions:
 """
 )
 
-
 Chain Construction:
 
 graph_response_chain = graph_response_prompt | llm_2
+
+
 
 🧠 ​ 2.4 General QA Chain
 
@@ -223,23 +228,70 @@ general_qa_chain = general_qa_prompt | llm_3
 
 
 
+3. Smart QA System Function
 
+✈️ 3.1 Function Definition
 
+def smart_qa_system(question):
+    history = memory.load_memory_variables({}).get('history', '')
+    graph_html = None
+
+✈️ 3.2 Main Processing Logic
+
+    try:
+        response = router_chain.invoke({"question": question})
+        response_type = response.content.strip().lower()
+
+        if response_type == "graph":
+            print("【System】Judged as a Graph problem, queried using the query assistant")
+
+            cypher_output = cypher_chain.invoke({"query": question})
+            graph_data = cypher_output.get("result", cypher_output)
+
+            intermediate_steps = cypher_output.get("intermediate_steps", [])
+            if intermediate_steps and isinstance(intermediate_steps[0], dict):
+                cypher = intermediate_steps[0].get("query", "").replace("cypher", "").strip()
+            else:
+                cypher = ""
+
+            print(f"【Debug】Generated Cypher: {cypher}")
+            print(f"【Debug】Raw data for knowledge graphs: {graph_data}")
+
+            graph_html = generate_graph_html(graph_data)
+            print(f"【Debug】Path to the HTML file of the generated Knowledge Graph: {graph_html}")
+
+            answer = graph_response_chain.invoke({
+                "question": question,
+                "graph_data": graph_data,
+                "cypher": cypher
+            })
+        else:
+            print("【System】Judged as a Design question, answered using the reasoning assistant.")
+            answer = general_qa_chain.invoke({
+                "question": question,
+                "history": history
+            })
+
+        result = answer.content
+✈️ 3.3 Error Handling
+
+    except Exception as e:
+        print(f"【Error】Errors in dealing with problems: {str(e)}")
+        result = "Sorry, there was an error processing your question. Please try asking the question again or ask a different question."
+
+✈️ 3.4 Memory Management and Return
+
+    memory.save_context({"input": question}, {"output": result})
+    return result, graph_html
 
  ``` 
 
 ### 2.2 app_for_Design_on_Graph.py - 可视化应用接口
 
 
-
 #### ​**app_for_Design_on_Graph核心数据结构手册**​：
 
 ```python
-
-
-
-​​
-
 
 🖼️ 1.1 整体布局
 
@@ -291,8 +343,6 @@ def handle_chat(user_message, history):
 
 
     
-
-
 🗃️ 2.2 按钮绑定
 python
 复制
