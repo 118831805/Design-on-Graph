@@ -62,6 +62,9 @@ The design of large-scale equipment manufacturing systems plays a crucial role i
 
 ▸ 核心架构如下图所展示：  
 
+![Uploading c660ad2d7de037d9d87d9e53de00c41.jpg…]()
+
+
 #### ​**Design-on-Graph核心数据结构手册**​：
 
 ```python
