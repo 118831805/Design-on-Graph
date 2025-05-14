@@ -76,6 +76,123 @@ class EnhancedNeo4jGraph(Neo4jGraph):
         "resource": "MATCH (o:Operation)-[r:REQUIRES]->(res) RETURN o.name, res.type, r.quantity"
     }
 
+🧠 多轮对话记忆体
+python
+复制
+class AssemblyMemory(ConversationBufferWindowMemory):
+    """
+    飞机装配对话上下文存储器（继承自ConversationBufferWindowMemory）
+    
+    数据结构：
+    {
+        "history": [
+            {
+                "input": "如何优化第3象限铆接顺序？",
+                "output": "建议方案：1. 先完成自动铆接（操作A12）...",
+                "metadata": {
+                    "constraints": ["ASME_Y14.5", "ISO_9001"],
+                    "resources": ["RivetBot-3"]
+                }
+            }
+        ],
+        "buffer_size": 10  # 保留最近10轮关键对话
+    }
+    """
+🛠️ 制造设计核心类
+python
+复制
+class AircraftAssemblyDesign:
+    def __init__(self):
+        # 设计参数（航空专用字段）
+        self.design_parameters = {
+            "material": ("AL-7075", "NASM-1256"),  # 材料标准
+            "joint_type": ["lap", "butt"],         # 连接形式
+            "load_requirements": {                 # 载荷要求
+                "static": "≥3.5kN", 
+                "fatigue": "10^6 cycles"
+            }
+        }
+        
+        # 约束关系图（使用networkX扩展）
+        self.constraint_graph = nx.MultiDiGraph(
+            incoming_graph_data=None,
+            ​**​{
+                "node_type": {
+                    "operation": {"color": "#FF6B6B", "shape": "box"},
+                    "resource": {"color": "#4ECDC4", "shape": "diamond"}
+                },
+                "edge_attrs": {
+                    "HAS_PRECEDENCE": {"style": "dashed"},
+                    "REQUIRES": {"arrowsize": 1.5}
+                }
+            }
+        )
+        
+        # 优化指标（航空特定指标）
+        self.optimization_metrics = [
+            ("weight_reduction", "Δkg", "目标减重"),
+            ("cost", "€", "总成本"),
+            ("assembly_time", "min", "工位周期")
+        ]
+📊 图数据解析规范
+python
+复制
+GRAPH_DATA_SCHEMA = {
+    # 格式A：单节点详情（用于资源/操作详情展示）
+    "Format_A": {
+        "sample": [{"operation": {"name": "A12", "type": "auto"}}],
+        "mapping": {
+            "name": "节点名称",
+            "type": ("manual", "auto")
+        }
+    },
+    
+    # 格式B：二元关系对（用于工序依赖）
+    "Format_B": {
+        "sample": [{"pre_op": "A11", "post_op": "A12"}],
+        "required_fields": ["pre_op", "post_op"]
+    },
+    
+    # 格式C：嵌套属性（用于带约束的操作）
+    "Format_C": {
+        "sample": [{
+            "operation": {"name": "A12", "duration": 120},
+            "constraint": {"type": "parallel_limit", "value": 2}
+        }],
+        "nested_fields": ["operation", "constraint"]
+    }
+}
+⚙️ 可视化配置
+python
+复制
+VISUALIZATION_PROFILES = {
+    "default": {
+        "physics": {
+            "solver": "forceAtlas2Based",
+            "gravitationalConstant": -50  # 负值实现节点分散
+        },
+        "nodes": {
+            "operation": {
+                "color": {
+                    "auto": "#5F6FFF",
+                    "manual": "#FF7E5F"
+                },
+                "size": {
+                    "critical": 25,
+                    "normal": 15
+                }
+            },
+            "resource": {
+                "shape": "diamond",
+                "color": "#6BDD9D"
+            }
+        }
+    },
+    "simplified": {
+        "physics": {"enabled": False},
+        "nodes": {"fixed": True}
+    }
+}
 #### 🧠多轮对话记忆体
 
 
