@@ -64,6 +64,10 @@ class ManufacturingDesign:
         self.constraint_graph = nx.Graph()  # 网络X构建的约束关系图
         self.optimization_metrics = []  # 成本/强度等优化目标
 
+
+
+
+
 ### 2.1核心创新：
 
 
