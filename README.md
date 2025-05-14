@@ -60,6 +60,7 @@ The design of large-scale equipment manufacturing systems plays a crucial role i
 
 ```python
 🔗 ​**知识图谱交互层​**
+
 class EnhancedNeo4jGraph(Neo4jGraph):
     """
     航空制造知识图谱连接器（扩展自langchain_community.graphs.Neo4jGraph）
@@ -76,7 +77,9 @@ class EnhancedNeo4jGraph(Neo4jGraph):
         "resource": "MATCH (o:Operation)-[r:REQUIRES]->(res) RETURN o.name, res.type, r.quantity"
     }
 
-🧠 多轮对话记忆体
+
+🧠 ​**多轮对话记忆体​**
+
 class AssemblyMemory(ConversationBufferWindowMemory):
     """
     飞机装配对话上下文存储器（继承自ConversationBufferWindowMemory）
@@ -96,7 +99,9 @@ class AssemblyMemory(ConversationBufferWindowMemory):
         "buffer_size": 10  # 保留最近10轮关键对话
     }
     """
-🛠️ 制造设计核心类
+
+🛠️ ​**制造设计核心类​**
+
 class AircraftAssemblyDesign:
     def __init__(self):
         # 设计参数（航空专用字段）
@@ -130,7 +135,9 @@ class AircraftAssemblyDesign:
             ("cost", "€", "总成本"),
             ("assembly_time", "min", "工位周期")
         ]
-📊 图数据解析规范
+
+📊 ​**图数据解析规范​**
+
 GRAPH_DATA_SCHEMA = {
     # 格式A：单节点详情（用于资源/操作详情展示）
     "Format_A": {
@@ -156,7 +163,9 @@ GRAPH_DATA_SCHEMA = {
         "nested_fields": ["operation", "constraint"]
     }
 }
-⚙️ 可视化配置
+
+⚙️ ​**可视化配置​**
+
 VISUALIZATION_PROFILES = {
     "default": {
         "physics": {
@@ -238,7 +247,9 @@ class UIElements:
             gr.Button("Plan")  # 自动生成四象限机身装配方案
         ]
     }
-🗃️ ​数据管理层​
+
+🗃️ ​​**数据管理层​​**
+
 class DataManager:
     """
     制造知识图谱可视化数据处理器
@@ -266,7 +277,9 @@ class DataManager:
     def get_graph_url(cls, path: str) -> str:
         """生成本地图谱文件访问URL (兼容Windows路径)"""
         ...
-🤖 ​业务逻辑层​
+
+🤖 ​**​业务逻辑层​​**
+
 class AssemblyChatHandler:
     """
     飞机装配对话处理器
@@ -296,7 +309,9 @@ class AssemblyChatHandler:
         "自动/手动工序并行规则",
         "工装夹具使用顺序"
     ]
-🌐 ​服务配置​
+
+🌐 ​​**服务配置​​**
+
 class ServerConfig:
     """
     航空专用部署配置
