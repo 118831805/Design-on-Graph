@@ -29,6 +29,9 @@ Design-on-Graph: A graph retrieval-augmented generation-based method to support 
 ### 1.3 核心内容：
 The design of large-scale equipment manufacturing systems plays a crucial role in ensuring product performance, optimizing production efficiency, and reducing lifecycle costs. Effective reuse of domain knowledge is essential for maintaining both the quality and efficiency of manufacturing system design. Although existing knowledge graph technologies standardize the representation and storage of such domain knowledge, the complex design constraints and multiple optimization objectives of manufacturing systems still pose significant challenges to the efficient reuse of domain knowledge. Recent advancements in the large language model (LLM) and retrieval-augmented generation (RAG) have led to the emergence of graph retrieval-augmented generation (GraphRAG), which presents a promising approach to overcoming these challenges. This paper proposes a novel GraphRAG-based method, Design-on-Graph, to support knowledge management and automated generation of design plans for manufacturing systems. This method employs the LLM to intelligently retrieve and verbalize structured domain knowledge through multi-turn conversations, achieving high-efficiency knowledge management for manufacturing systems. Additionally, the retrieved domain knowledge is systematically archived within conversation history, providing contextual support for LLM-driven reasoning tasks to streamline automated design processes. Finally, a case study on an aircraft fuselage joint system serves as the test scenario, and an AI agent incorporating all the above functionalities is developed to demonstrate and evaluate the performance of the proposed Design-on-Graph method.
 
+![0db01adc3553f46fbae9a7d4a7a72b4](https://github.com/user-attachments/assets/24f7a978-e4ff-4ab1-a3f6-61daf7e4eb4c)
+
+
 ### 1.4 相关论文：
 如果您认为我们的代码对您有帮助，请引用以下论文：
 
@@ -56,27 +59,30 @@ The design of large-scale equipment manufacturing systems plays a crucial role i
 - ​**多轮对话管理**​：维护对话历史上下文（`ConversationBufferWindowMemory`）  
 - ​**设计验证**​：检查生成方案与制造标准的合规性  
 
+
+▸ 核心架构如下图所展示：  
+
 #### ​**Design-on-Graph核心数据结构手册**​：
 
 ```python
 
-##### 1. Main Components
+ 1. Main Components
 
-🔗 ###### 1.1 Language Models
+🔗  1.1 Language Models
 llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 llm_2 = ChatOpenAI(model="gpt-4o", temperature=0)
 llm_3 = ChatOpenAI(model="o1-preview", temperature=0)
 
-🔗 ###### 1.2 Graph Database Connection
+🔗  1.2 Graph Database Connection
 graph = Neo4jGraph()
 
-🔗 ###### 1.3 Memory Component
+🔗  1.3 Memory Component
 memory = ConversationBufferWindowMemory(k=10)
 
 
-##### 2. Chain Components
+ 2. Chain Components
 
-🧠 ​###### 2.1 Router Chain
+🧠 ​ 2.1 Router Chain
 Prompt Template:
 
 router_prompt = PromptTemplate(
@@ -100,7 +106,7 @@ Chain Construction:
 
 router_chain = router_prompt | llm
 
-🧠 ​###### 2.2 Cypher Chain
+🧠 ​ 2.2 Cypher Chain
 
 cypher_chain = GraphCypherQAChain.from_llm(
     llm=llm,
@@ -117,7 +123,7 @@ cypher_chain = GraphCypherQAChain.from_llm(
     return_intermediate_steps=True
 )
 
-🧠 ​###### 2.3 Graph Response Chain
+🧠 ​ 2.3 Graph Response Chain
 
 Prompt Template:
 
@@ -148,7 +154,7 @@ Chain Construction:
 
 graph_response_chain = graph_response_prompt | llm_2
 
-🧠 ​###### 2.4 General QA Chain
+🧠 ​ 2.4 General QA Chain
 
 Prompt Template:
 
@@ -220,148 +226,112 @@ general_qa_chain = general_qa_prompt | llm_3
 
 ### 2.2 app_for_Design_on_Graph.py - 可视化应用接口
 
-#### ✈️ 核心定位
-​**航空装配智能设计工作台**​  
-专为飞机机身连接系统设计工程师打造的交互式决策平台，实现：
-- ​**知识图谱驱动**​：实时查询制造约束关系（如铆接工序依赖）
-- ​**多方案验证**​：自动检查ASME Y14.5-2021标准合规性
-- ​**可追溯决策**​：保留所有设计迭代的历史版本对比
 
-#### 🖥️ 技术架构
-```mermaid
-graph LR
-    A[工程师] --> B{Web界面}
-    B --> C[方案生成引擎]
-    C --> D[Neo4j 知识图谱]
-    C --> E[LLM推理服务]
-    B --> F[3D工艺仿真]
-```
 
 #### ​**app_for_Design_on_Graph核心数据结构手册**​：
 
 ```python
 
 
-🖼️ ​**UI 组件层 (Gradio)​**​
-class UIElements:
-    """
-    航空装配设计交互界面核心组件
-    """
-    layout = {
-        "header": {
-            "logo": gr.Image(value="logo.png"),  # 南科大实验室LOGO
-            "title": gr.Markdown("""
-                <h1>Design-on-Graph</h1>
-                <p>Supported by AI4DESE Laboratory</p>
-            """)
-        },
-        "main": {
-            "graph_panel": gr.HTML(  # 知识图谱可视化区
-                default_html="...",  # 初始占位内容
-                height=650
-            ),
-            "chat_interface": {
-                "chatbot": gr.Chatbot(type="messages"),  # 消息式聊天框
-                "input_box": gr.Textbox(placeholder="Ask something..."),
-                "buttons": [
-                    gr.Button("Send"), 
-                    gr.Button("Clear")
-                ]
-            }
-        },
-        "examples": [  # 航空装配专用示例按钮
-            gr.Button("Process"), 
-            gr.Button("Operation"),
-            gr.Button("Resource"),
-            gr.Button("Required resource"),
-            gr.Button("Predecessor"),
-            gr.Button("Plan")  # 自动生成四象限机身装配方案
-        ]
-    }
+```python
 
-🗃️ ​​**数据管理层​​**
+1.1 整体布局
+with gr.Blocks() as demo:
+    # 标题区
+    with gr.Row():
+        with gr.Column(scale=1, min_width=120):
+            gr.Image(...)  # 徽标
+        with gr.Column(scale=2):
+            gr.Markdown(...)  # 标题文本
+    
+    # 主内容区
+    with gr.Row():
+        with gr.Column(scale=4):
+            graph_html = gr.HTML(...)  # 图形区
+        with gr.Column(scale=5):
+            chatbot = gr.Chatbot(...)  # 聊天区
+            user_input = gr.Textbox(...)  # 输入框
+            # 操作按钮
+            with gr.Row():
+                send_btn = gr.Button("Send")
+                clear_btn = gr.Button("Clear")
+    
+    # 示例区
+    with gr.Row():
+        gr.Markdown("​**Examples:​**​")
+        gr.Button("Process").click(...)
+        gr.Button("Operation").click(...)
+        # ...其他示例按钮
 
-class DataManager:
-    """
-    制造知识图谱可视化数据处理器
-    """
-    # 静态文件管理
-    static_files = {
-        "storage_path": Path("static"),
-        "max_age": 3600,  # 1小时自动清理旧图谱
-        "naming_pattern": "graph_*.html"  # 图谱文件命名规则
-    }
 
-    # 图谱HTML包装器
-    graph_wrapper = """
-    <div style='width: 100%; height: 650px; border: 1px solid #ccc;'>
-        <iframe srcdoc="{content}" style="width:100%;height:100%;"></iframe>
-    </div>
-    """
 
-    @classmethod
-    def clean_old_graphs(cls):
-        """清理过期的知识图谱可视化文件"""
-        ...
-
-    @classmethod
-    def get_graph_url(cls, path: str) -> str:
-        """生成本地图谱文件访问URL (兼容Windows路径)"""
-        ...
-
-🤖 ​**​业务逻辑层​​**
-
-class AssemblyChatHandler:
-    """
-    飞机装配对话处理器
-    """
-    message_format = {
-        "user": {"role": "user", "content": "..."},
-        "assistant": {
-            "role": "assistant",
-            "content": "..."  # 来自smart_qa_system的响应
-        }
-    }
-
-    workflow = {
-        "input_processing": [
-            "用户提问 → 清理旧图谱 → 调用推理引擎",
-            "知识图谱路径处理 → HTML包装"
+2. 核心交互逻辑
+2.1 消息处理函数
+python
+复制
+def handle_chat(user_message, history):
+    clean_old_graphs()
+    response, graph_html_path = smart_qa_system(user_message)
+    graph_html_content = get_graph_html_content(graph_html_path)
+    
+    return [
+        history + [
+            {"role": "user", "content": user_message},
+            {"role": "assistant", "content": response}
         ],
-        "output_generation": [
-            "更新聊天历史 → 渲染可视化图谱",
-            "保持上下文一致性"
-        ]
-    }
-
-    # 航空装配专用约束检查项
-    constraint_checks = [
-        "四象限装配完整性",
-        "自动/手动工序并行规则",
-        "工装夹具使用顺序"
+        graph_html_content
     ]
+2.2 按钮绑定
+python
+复制
+# 发送按钮
+send_btn.click(
+    fn=handle_chat,
+    inputs=[user_input, chatbot],
+    outputs=[chatbot, graph_html]
+)
 
-🌐 ​​**服务配置​​**
+# 清除按钮
+clear_btn.click(
+    fn=lambda: ([], default_graph_html),
+    outputs=[chatbot, graph_html]
+)
+3. 预设查询模板
+3.1 流程查询
+python
+复制
+"List the subprocess of each process."
+3.2 资源查询
+python
+复制
+"List all information of resources."
+3.3 方案设计查询
+python
+复制
+"""This is a general question. Please help me design a complete aircraft fuselage assembly scheme...
+(包含9条具体约束条件)"""
+4. 系统配置
+4.1 静态资源目录
+python
+复制
+static_dir = os.path.join(os.getcwd(), "static")
+if not os.path.exists(static_dir):
+    os.makedirs(static_dir)
+4.2 启动参数
+python
+复制
+demo.launch(
+    server_name="localhost",
+    server_port=7860,
+    share=False
+)
+🖼️ 
 
-class ServerConfig:
-    """
-    航空专用部署配置
-    """
-    launch_params = {
-        "server_name": "localhost",
-        "server_port": 7860,
-        "share": False,
-        "static_dir": {
-            "path": "static",
-            "auto_create": True
-        }
-    }
+🗃️ ​​
+🤖 
+    
 
-    # 南科大实验室网络策略
-    network_policy = {
-        "allowed_origins": ["*.sustech.edu.cn"],
-        "cors_enabled": False
-    }
+🌐
 
 ```
 
