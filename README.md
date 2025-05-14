@@ -77,8 +77,6 @@ class EnhancedNeo4jGraph(Neo4jGraph):
     }
 
 🧠 多轮对话记忆体
-python
-复制
 class AssemblyMemory(ConversationBufferWindowMemory):
     """
     飞机装配对话上下文存储器（继承自ConversationBufferWindowMemory）
@@ -99,8 +97,6 @@ class AssemblyMemory(ConversationBufferWindowMemory):
     }
     """
 🛠️ 制造设计核心类
-python
-复制
 class AircraftAssemblyDesign:
     def __init__(self):
         # 设计参数（航空专用字段）
@@ -135,8 +131,6 @@ class AircraftAssemblyDesign:
             ("assembly_time", "min", "工位周期")
         ]
 📊 图数据解析规范
-python
-复制
 GRAPH_DATA_SCHEMA = {
     # 格式A：单节点详情（用于资源/操作详情展示）
     "Format_A": {
@@ -163,8 +157,6 @@ GRAPH_DATA_SCHEMA = {
     }
 }
 ⚙️ 可视化配置
-python
-复制
 VISUALIZATION_PROFILES = {
     "default": {
         "physics": {
@@ -193,7 +185,7 @@ VISUALIZATION_PROFILES = {
         "nodes": {"fixed": True}
     }
 }
-#### 🧠多轮对话记忆体
+
 
 
 ### 2.1核心创新：
