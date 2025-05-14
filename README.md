@@ -8,6 +8,7 @@ Design-on-Graph: A graph retrieval-augmented generation-based method to support 
 ## 1. 项目整体描述
 
 本项目提出**Design-on-Graph**方法，这是一个基于**GraphRAG（图检索增强生成）​**的制造系统智能化设计框架，通过大语言模型（LLM）实现领域知识的高效管理与设计方案的自动生成。
+本项目构建的本体和知识图谱可以在github仓库：https://github.com/zhengxiaochen/ontology_aircraft_system中找到。
 
 ### 核心创新：
 - 🧠 ​**知识动态检索**​：采用多轮对话机制智能检索制造领域知识图谱中的结构化约束条件
