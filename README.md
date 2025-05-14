@@ -214,6 +214,7 @@ graph LR
     C --> D[Neo4j 知识图谱]
     C --> E[LLM推理服务]
     B --> F[3D工艺仿真]
+```
 
 #### ​**app_for_Design_on_Graph核心数据结构手册**​：
 
