@@ -237,9 +237,12 @@ general_qa_chain = general_qa_prompt | llm_3
 ```python
 
 
-```python
 
-1.1 整体布局
+​​
+
+
+🖼️ 1.1 整体布局
+
 with gr.Blocks() as demo:
     # 标题区
     with gr.Row():
@@ -269,10 +272,10 @@ with gr.Blocks() as demo:
 
 
 
-2. 核心交互逻辑
-2.1 消息处理函数
-python
-复制
+🗃️ 2. 核心交互逻辑
+
+🗃️ 2.1 消息处理函数
+
 def handle_chat(user_message, history):
     clean_old_graphs()
     response, graph_html_path = smart_qa_system(user_message)
@@ -285,7 +288,12 @@ def handle_chat(user_message, history):
         ],
         graph_html_content
     ]
-2.2 按钮绑定
+
+
+    
+
+
+🗃️ 2.2 按钮绑定
 python
 复制
 # 发送按钮
@@ -300,42 +308,40 @@ clear_btn.click(
     fn=lambda: ([], default_graph_html),
     outputs=[chatbot, graph_html]
 )
-3. 预设查询模板
-3.1 流程查询
-python
-复制
+
+
+🤖  3. 预设查询模板
+
+🤖  3.1 流程查询
+
 "List the subprocess of each process."
-3.2 资源查询
-python
-复制
+
+🤖 3.2 资源查询
+
 "List all information of resources."
-3.3 方案设计查询
-python
-复制
+
+🤖 3.3 方案设计查询
+
 """This is a general question. Please help me design a complete aircraft fuselage assembly scheme...
 (包含9条具体约束条件)"""
-4. 系统配置
-4.1 静态资源目录
-python
-复制
+
+
+🌐 4. 系统配置
+
+🌐 4.1 静态资源目录
+
 static_dir = os.path.join(os.getcwd(), "static")
 if not os.path.exists(static_dir):
     os.makedirs(static_dir)
-4.2 启动参数
-python
-复制
+
+🌐 4.2 启动参数
+
 demo.launch(
     server_name="localhost",
     server_port=7860,
     share=False
 )
-🖼️ 
 
-🗃️ ​​
-🤖 
-    
-
-🌐
 
 ```
 
