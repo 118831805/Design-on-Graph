@@ -56,14 +56,25 @@ The design of large-scale equipment manufacturing systems plays a crucial role i
 - ​**多轮对话管理**​：维护对话历史上下文（`ConversationBufferWindowMemory`）  
 - ​**设计验证**​：检查生成方案与制造标准的合规性  
 
-​**关键数据结构**​：
-```python
-class ManufacturingDesign:
-    def __init__(self):
-        self.design_parameters = {}  # 存储材料/尺寸等参数
-        self.constraint_graph = nx.Graph()  # 网络X构建的约束关系图
-        self.optimization_metrics = []  # 成本/强度等优化目标
+### ​**Design-on-Graph 核心数据结构手册**​：
 
+#### 🔗 知识图谱交互层
+```python
+class EnhancedNeo4jGraph(Neo4jGraph):
+    """
+    航空制造知识图谱连接器（扩展自langchain_community.graphs.Neo4jGraph）
+    
+    关键数据表：
+    │ 节点类型       │ 属性示例                      │ 标签          │
+    │---------------│-----------------------------│---------------│
+    │ Operation     │ name, duration, auto/manual │ HAS_PRECEDENCE│
+    │ Resource      │ type, cost, quantity        │ REQUIRES      │
+    │ Constraint    │ standard, tolerance         │ APPLIES_TO    │
+    """
+    QUERY_TEMPLATES = {
+        "precedence": "MATCH (a:Operation)-[r:HAS_PRECEDENCE]->(b) RETURN a.name, type(r), b.name",
+        "resource": "MATCH (o:Operation)-[r:REQUIRES]->(res) RETURN o.name, res.type, r.quantity"
+    }
 
 
 
