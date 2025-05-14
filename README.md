@@ -58,8 +58,8 @@ The design of large-scale equipment manufacturing systems plays a crucial role i
 
 ### ​**Design-on-Graph 核心数据结构手册**​：
 
-#### 🔗 知识图谱交互层
 ```python
+🔗 知识图谱交互层
 class EnhancedNeo4jGraph(Neo4jGraph):
     """
     航空制造知识图谱连接器（扩展自langchain_community.graphs.Neo4jGraph）
