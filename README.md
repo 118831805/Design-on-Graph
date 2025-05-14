@@ -56,7 +56,7 @@ The design of large-scale equipment manufacturing systems plays a crucial role i
 - ​**多轮对话管理**​：维护对话历史上下文（`ConversationBufferWindowMemory`）  
 - ​**设计验证**​：检查生成方案与制造标准的合规性  
 
-### ​**Design-on-Graph 核心数据结构手册**​：
+#### ​**Design-on-Graph核心数据结构手册**​：
 
 ```python
 🔗 知识图谱交互层
@@ -186,7 +186,138 @@ VISUALIZATION_PROFILES = {
     }
 }
 
+ ``` 
 
+### 2.2 app_for_Design_on_Graph.py - 可视化应用接口
+
+​**定位**​：面向制造工程师的交互式设计平台
+
+▸ 技术栈：
+-**前端**​：Streamlit构建的Web界面
+-**​可视化**​：PyVis渲染知识图谱拓扑关系
+-**​部署**​：Docker容器化封装
+
+#### ​**app_for_Design_on_Graph核心数据结构手册**​：
+
+```python
+
+
+🖼️ ​**UI 组件层 (Gradio)​**​
+class UIElements:
+    """
+    航空装配设计交互界面核心组件
+    """
+    layout = {
+        "header": {
+            "logo": gr.Image(value="logo.png"),  # 南科大实验室LOGO
+            "title": gr.Markdown("""
+                <h1>Design-on-Graph</h1>
+                <p>Supported by AI4DESE Laboratory</p>
+            """)
+        },
+        "main": {
+            "graph_panel": gr.HTML(  # 知识图谱可视化区
+                default_html="...",  # 初始占位内容
+                height=650
+            ),
+            "chat_interface": {
+                "chatbot": gr.Chatbot(type="messages"),  # 消息式聊天框
+                "input_box": gr.Textbox(placeholder="Ask something..."),
+                "buttons": [
+                    gr.Button("Send"), 
+                    gr.Button("Clear")
+                ]
+            }
+        },
+        "examples": [  # 航空装配专用示例按钮
+            gr.Button("Process"), 
+            gr.Button("Operation"),
+            gr.Button("Resource"),
+            gr.Button("Required resource"),
+            gr.Button("Predecessor"),
+            gr.Button("Plan")  # 自动生成四象限机身装配方案
+        ]
+    }
+🗃️ ​数据管理层​
+class DataManager:
+    """
+    制造知识图谱可视化数据处理器
+    """
+    # 静态文件管理
+    static_files = {
+        "storage_path": Path("static"),
+        "max_age": 3600,  # 1小时自动清理旧图谱
+        "naming_pattern": "graph_*.html"  # 图谱文件命名规则
+    }
+
+    # 图谱HTML包装器
+    graph_wrapper = """
+    <div style='width: 100%; height: 650px; border: 1px solid #ccc;'>
+        <iframe srcdoc="{content}" style="width:100%;height:100%;"></iframe>
+    </div>
+    """
+
+    @classmethod
+    def clean_old_graphs(cls):
+        """清理过期的知识图谱可视化文件"""
+        ...
+
+    @classmethod
+    def get_graph_url(cls, path: str) -> str:
+        """生成本地图谱文件访问URL (兼容Windows路径)"""
+        ...
+🤖 ​业务逻辑层​
+class AssemblyChatHandler:
+    """
+    飞机装配对话处理器
+    """
+    message_format = {
+        "user": {"role": "user", "content": "..."},
+        "assistant": {
+            "role": "assistant",
+            "content": "..."  # 来自smart_qa_system的响应
+        }
+    }
+
+    workflow = {
+        "input_processing": [
+            "用户提问 → 清理旧图谱 → 调用推理引擎",
+            "知识图谱路径处理 → HTML包装"
+        ],
+        "output_generation": [
+            "更新聊天历史 → 渲染可视化图谱",
+            "保持上下文一致性"
+        ]
+    }
+
+    # 航空装配专用约束检查项
+    constraint_checks = [
+        "四象限装配完整性",
+        "自动/手动工序并行规则",
+        "工装夹具使用顺序"
+    ]
+🌐 ​服务配置​
+class ServerConfig:
+    """
+    航空专用部署配置
+    """
+    launch_params = {
+        "server_name": "localhost",
+        "server_port": 7860,
+        "share": False,
+        "static_dir": {
+            "path": "static",
+            "auto_create": True
+        }
+    }
+
+    # 南科大实验室网络策略
+    network_policy = {
+        "allowed_origins": ["*.sustech.edu.cn"],
+        "cors_enabled": False
+    }
+
+```
 
 ### 2.1核心创新：
 
