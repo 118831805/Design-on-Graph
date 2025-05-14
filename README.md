@@ -12,29 +12,32 @@ Design-on-Graph: A graph retrieval-augmented generation-based method to support 
 
 -The ontology and knowledge graph constructed for this project can be found in the GitHub repository, with the following links: https://github.com/zhengxiaochen/ontology_aircraft_system
 
-### 1.1 核心创新：
-- 🧠 ​**知识动态检索**​：采用多轮对话机制智能检索制造领域知识图谱中的结构化约束条件
-- 🏭 ​**上下文感知设计**​：利用对话历史归档实现设计知识的持续积累与上下文关联推理
-- ✈️ ​**工业级验证**​：以飞机机身连接系统为测试场景构建完整AI代理工作流
+### 1.1 Core Innovation：
+- 🧠 ​**Knowledge dynamic retrieval**​：Using a multi round dialogue mechanism to intelligently retrieve structured constraint conditions from the knowledge graph in the manufacturing field
 
-### 1.2 技术亮点：
-✅ ​**跨模态知识融合**​  
-将制造系统的拓扑约束、物理参数等结构化知识（图数据）与自然语言描述（文本数据）统一编码  
+- 🏭 ​**Context aware design**​：Utilizing dialogue history archiving to achieve continuous accumulation of design knowledge and contextual inference
+  
+- ✈️ ​**Industrial grade verification**​：Constructing a complete AI agent workflow using the aircraft fuselage connection system as a testing scenario
+  
 
-✅ ​**多目标优化支持**​  
-通过LLM的链式推理能力平衡生产效率、成本控制、性能指标等多维度优化目标  
+### 1.2 Technical highlights：
+✅ ​**Cross modal knowledge fusion**​  
+Unify the encoding of structured knowledge (graph data) such as topological constraints and physical parameters of manufacturing systems with natural language descriptions (text data)
 
-✅ ​**可解释性设计**​  
-所有生成的设计方案均附带知识溯源路径，支持回溯检索到的原始领域知识节点  
+✅ ​**Multi objective optimization support**​  
+Balancing multidimensional optimization objectives such as production efficiency, cost control, and performance indicators through LLM's chain reasoning capability
 
-### 1.3 核心内容：
+✅ ​**Interpretable design**​  
+All generated design schemes come with a knowledge traceability path, supporting the retrieval of original domain knowledge nodes through backtracking 
+
+### 1.3 Core Content：
 The design of large-scale equipment manufacturing systems plays a crucial role in ensuring product performance, optimizing production efficiency, and reducing lifecycle costs. Effective reuse of domain knowledge is essential for maintaining both the quality and efficiency of manufacturing system design. Although existing knowledge graph technologies standardize the representation and storage of such domain knowledge, the complex design constraints and multiple optimization objectives of manufacturing systems still pose significant challenges to the efficient reuse of domain knowledge. Recent advancements in the large language model (LLM) and retrieval-augmented generation (RAG) have led to the emergence of graph retrieval-augmented generation (GraphRAG), which presents a promising approach to overcoming these challenges. This paper proposes a novel GraphRAG-based method, Design-on-Graph, to support knowledge management and automated generation of design plans for manufacturing systems. This method employs the LLM to intelligently retrieve and verbalize structured domain knowledge through multi-turn conversations, achieving high-efficiency knowledge management for manufacturing systems. Additionally, the retrieved domain knowledge is systematically archived within conversation history, providing contextual support for LLM-driven reasoning tasks to streamline automated design processes. Finally, a case study on an aircraft fuselage joint system serves as the test scenario, and an AI agent incorporating all the above functionalities is developed to demonstrate and evaluate the performance of the proposed Design-on-Graph method.
 
 ![0db01adc3553f46fbae9a7d4a7a72b4](https://github.com/user-attachments/assets/24f7a978-e4ff-4ab1-a3f6-61daf7e4eb4c)
 
 
-### 1.4 相关论文：
-如果您认为我们的代码对您有帮助，请引用以下论文：
+### 1.4 Related papers：
+If you think our code is helpful to you, please cite the following paper：
 
 [1] Design-on-Graph: A graph retrieval-augmented generation-based method to support manufacturing system design
 
@@ -46,28 +49,31 @@ The design of large-scale equipment manufacturing systems plays a crucial role i
 
 ---
 
-## 2. 核心文件介绍
+## 2. Introduction to Core Documents
 
-本项目包含两个协同工作的核心模块，形成从知识推理到可视化应用的完整闭环。
-
-分别是**Design_on_Graph.py**与**app_for_Design_on_Graph.py**，接下来将逐一介绍。
+This project includes two core modules for collaborative work, forming a complete closed loop from knowledge reasoning to visual application.
 
 
-### 2.1 `Design_on_Graph.py` - 核心推理引擎
-​**定位**​：制造领域知识图谱与LLM的交互中枢  
-▸ 核心功能：  
-- ​**知识检索**​：通过SPARQL查询从制造知识图谱中提取拓扑约束、材料属性等结构化数据  
-- ​**多轮对话管理**​：维护对话历史上下文（`ConversationBufferWindowMemory`）  
-- ​**设计验证**​：检查生成方案与制造标准的合规性  
+They are **Design_on_Graph.py**and **app_for_Design_on_Graph.py**, which will be introduced one by one.
 
+### 2.1 `Design_on_Graph.py` - Core reasoning engine
+​**Positioning**​：The interaction center between knowledge graph and LLM in the manufacturing field
 
-▸ 核心架构如下图所展示：  
+▸ Core functions：  
+
+-**Knowledge Retrieval**: Extracting structured data such as topological constraints and material properties from manufacturing knowledge graphs through SPARQL queries
+
+-**Multi round conversation management**: Maintain conversation history context (` ConversationBufferWindowMemory `)
+
+-**Design Verification**: Check the compliance of generated solutions with manufacturing standards
+
+▸ The core architecture is shown in the following figure：  
 
 ![c660ad2d7de037d9d87d9e53de00c41](https://github.com/user-attachments/assets/a4cbd701-cc9a-4694-a460-047b50fb9dec)
 
 
 
-#### ​**Design-on-Graph核心数据结构手册**​：
+#### ​**Design-on-Graph Core Data Structure Manual**​：
 
 ```python
 
@@ -287,47 +293,47 @@ def smart_qa_system(question):
 
  ``` 
 
-### 2.2 app_for_Design_on_Graph.py - 可视化应用接口
+### 2.2 app_for_Design_on_Graph.py - Visual application interface
 
 
-#### ​**app_for_Design_on_Graph核心数据结构手册**​：
+#### ​**app_for_Design_on_Graph Core Data Structure Manual**​：
 
 ```python
 
-🖼️ 1.1 整体布局
+🖼️ 1.1 Overall layout
 
 with gr.Blocks() as demo:
-    # 标题区
+  
     with gr.Row():
         with gr.Column(scale=1, min_width=120):
-            gr.Image(...)  # 徽标
+            gr.Image(...) 
         with gr.Column(scale=2):
-            gr.Markdown(...)  # 标题文本
+            gr.Markdown(...)  
     
-    # 主内容区
+    
     with gr.Row():
         with gr.Column(scale=4):
-            graph_html = gr.HTML(...)  # 图形区
+            graph_html = gr.HTML(...)  
         with gr.Column(scale=5):
-            chatbot = gr.Chatbot(...)  # 聊天区
-            user_input = gr.Textbox(...)  # 输入框
-            # 操作按钮
+            chatbot = gr.Chatbot(...)  
+            user_input = gr.Textbox(...)  
+          
             with gr.Row():
                 send_btn = gr.Button("Send")
                 clear_btn = gr.Button("Clear")
     
-    # 示例区
+    
     with gr.Row():
         gr.Markdown("​**Examples:​**​")
         gr.Button("Process").click(...)
         gr.Button("Operation").click(...)
-        # ...其他示例按钮
+      
 
 
 
-🗃️ 2. 核心交互逻辑
+🗃️ 2. Core Interaction Logic
 
-🗃️ 2.1 消息处理函数
+🗃️ 2.1 Message handler
 
 def handle_chat(user_message, history):
     clean_old_graphs()
@@ -344,48 +350,45 @@ def handle_chat(user_message, history):
 
 
     
-🗃️ 2.2 按钮绑定
-python
-复制
-# 发送按钮
+🗃️ 2.2 Button binding
+
 send_btn.click(
     fn=handle_chat,
     inputs=[user_input, chatbot],
     outputs=[chatbot, graph_html]
 )
 
-# 清除按钮
 clear_btn.click(
     fn=lambda: ([], default_graph_html),
     outputs=[chatbot, graph_html]
 )
 
 
-🤖  3. 预设查询模板
+🤖  3. Preset query template
 
-🤖  3.1 流程查询
+🤖  3.1 Process inquiry
 
 "List the subprocess of each process."
 
-🤖 3.2 资源查询
+🤖 3.2 Resource Query
 
 "List all information of resources."
 
-🤖 3.3 方案设计查询
+🤖 3.3 Scheme design query
 
 """This is a general question. Please help me design a complete aircraft fuselage assembly scheme...
-(包含9条具体约束条件)"""
+(Contains 9 specific constraints)"""
 
 
-🌐 4. 系统配置
+🌐 4. System Configuration
 
-🌐 4.1 静态资源目录
+🌐 4.1 Static resource directory
 
 static_dir = os.path.join(os.getcwd(), "static")
 if not os.path.exists(static_dir):
     os.makedirs(static_dir)
 
-🌐 4.2 启动参数
+🌐 4.2 Startup parameter 
 
 demo.launch(
     server_name="localhost",
@@ -397,17 +400,17 @@ demo.launch(
 ```
 
 
-## 3. 环境配置.env
+## 3. Environment configuration .env
 
 ```ini
 # ========================
-# ️️️️️✈️ 核心AI服务配置
+# ️️️️️✈️ Core AI service configuration
 # ========================
 OPENAI_API_KEY=  
 OPENAI_BASE_URL=  
 
 # ========================
-# ️️️️️🏭 制造知识图谱连接
+# ️️️️️🏭 Manufacturing Knowledge Graph Connection
 # ========================
 NEO4J_URI=bolt://localhost:7687       
 NEO4J_USERNAME=aerospace_engineer    
