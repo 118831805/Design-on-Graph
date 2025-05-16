@@ -45,7 +45,7 @@ If you think our code is helpful to you, please cite the following paper：
 
 [3] A semantic-driven tradespace framework to accelerate aircraft manufacturing system design
 
-[4] Development of an application ontology for knowledge management to support aircraft assembly system design
+[4] An aircraft assembly process formalism and verification method based on semantic modeling and MBSE
 
 ---
 
