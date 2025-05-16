@@ -413,6 +413,6 @@ OPENAI_BASE_URL=
 # ️️️️️🏭 Manufacturing Knowledge Graph Connection
 # ========================
 NEO4J_URI=bolt://localhost:7687       
-NEO4J_USERNAME=aerospace_engineer    
+NEO4J_USERNAME=
 NEO4J_PASSWORD=
 ```
